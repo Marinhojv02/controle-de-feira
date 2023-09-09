@@ -2,6 +2,8 @@ import express, { Application, Request, Response } from "express";
 import Database from "./utils/config/database";
 //routers
 import UserRoutes from "./routes/User.Routes";
+import ProductRoutes from "./routes/Products.Routes";
+import ShoppingListRoutes from "./routes/ShoppingList.Routes";
 
 class App{
     public app:Application;
@@ -24,7 +26,9 @@ class App{
         })
 
         this.app.use("/user", UserRoutes);
-    }
+        this.app.use("/product", ProductRoutes);
+        this.app.use("/shopping_list", ShoppingListRoutes);
+    }  
 
     protected databaseSync(): void {
         const db = new Database();
