@@ -10,7 +10,7 @@ import { Model, Table, Column, DataType } from 'sequelize-typescript';
     },
   ],
 })
-export class Product extends Model<Product> {
+export class Product extends Model {
   public static PRODUCT_ID = 'product_id' as string;
   public static PRODUCT_NAME = 'product_name' as string;
   public static DESCRIPTION = 'description' as string;

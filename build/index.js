@@ -5,16 +5,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const database_1 = __importDefault(require("./utils/config/database"));
+//routers
+const User_Routes_1 = __importDefault(require("./routes/User.Routes"));
 class App {
     constructor() {
         this.app = (0, express_1.default)();
+        this.databaseSync();
+        this.plugins();
         this.routes();
-        // this.databaseSync();
+    }
+    plugins() {
+        this.app.use(express_1.default.json());
+        this.app.use(express_1.default.urlencoded({ extended: true }));
     }
     routes() {
         this.app.route('/').get((req, res) => {
             res.send("Welcome home");
         });
+        this.app.use("/user", User_Routes_1.default);
     }
     databaseSync() {
         var _a;

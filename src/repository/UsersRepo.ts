@@ -17,17 +17,18 @@ export class UsersRepo implements IUsers {
                 password: user.password,
                 email: user.email,
                 type: user.type,
+                created_date: user.created_date,
+                last_login_date: user.last_login_date,
             });
         } catch (error) {
              throw new Error("Failed to create user!");
         }
     }
-
     async update(user: User): Promise<void> {
         try {
           const new_user = await User.findOne({
             where: {
-              id: user.id,
+                user_id: user.id,
             },
           });
           if (!new_user) {
@@ -40,14 +41,15 @@ export class UsersRepo implements IUsers {
 
           await new_user.save();
         } catch (error) {
-          throw new Error("Failed to create user!");
+            console.log(error)
+          throw new Error("Failed to update user!");
         }
       }
       async delete(userId: number): Promise<void> {
         try {
           const new_user = await User.findOne({
             where: {
-              id: userId,
+                user_id: userId,
             },
           });
           if (!new_user) {
@@ -56,29 +58,29 @@ export class UsersRepo implements IUsers {
     
           await new_user.destroy();
         } catch (error) {
-          throw new Error("Failed to create user!");
+          throw new Error("Failed to delete user!");
         }
       }
       async retrieveById(userId: number): Promise<User> {
         try {
           const new_user = await User.findOne({
             where: {
-              id: userId,
+                user_id: userId,
             },
           });
           if (!new_user) {
-            throw new Error("User not found!");
+            throw new Error("Users not found!");
           }
           return new_user;
         } catch (error) {
-          throw new Error("Failed to create user!");
+          throw new Error("Failed to retrieve users!");
         }
       }
       async retrieveAll(): Promise<User[]> {
         try {
          return await User.findAll();
         } catch (error) {
-          throw new Error("Failed to create user!");
+          throw new Error("Failed to retrieve user!");
         }
       }
 }
