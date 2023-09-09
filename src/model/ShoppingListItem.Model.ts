@@ -5,7 +5,7 @@ import { Product } from './Product.Model';
 @Table({
   tableName: 'ShoppingListItem',
 })
-export class ShoppingListItem extends Model<ShoppingListItem> {
+export class ShoppingListItem extends Model {
   public static ITEM_ID = 'item_id' as string;
   public static SHOPPING_LIST_ID = 'shopping_list_id' as string;
   public static PRODUCT_ID = 'product_id' as string;

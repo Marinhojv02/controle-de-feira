@@ -5,7 +5,7 @@ import { ShoppingListItem } from './ShoppingListItem.Model';
 @Table({
   tableName: 'ShoppingList',
 })
-export class ShoppingList extends Model<ShoppingList> {
+export class ShoppingList extends Model {
   public static SHOPPING_LIST_ID = 'shopping_list_id' as string;
   public static USER_ID = 'user_id' as string;
   public static CREATION_DATE = 'creation_date' as string;

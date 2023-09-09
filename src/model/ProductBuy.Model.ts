@@ -4,7 +4,7 @@ import { Product } from './Product.Model';
 @Table({
   tableName: 'ProductBuy',
 })
-export class ProductBuy extends Model<ProductBuy> {
+export class ProductBuy extends Model{
   public static PURCHASE_ID = 'purchase_id' as string;
   public static PRODUCT_ID = 'product_id' as string;
   public static PRICE = 'price' as string;
