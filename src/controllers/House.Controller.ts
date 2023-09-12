@@ -1,23 +1,37 @@
 import { Request, Response } from "express";
-import { UsersRepo } from "../repository/UsersRepo";
-import { User } from "../model/Users.Model";
+import { HousesRepo } from "../repository/HouseRepo";
+import { House } from "../model/House.Model";
+import { UserHouse } from "../model/UserHouse.Model";
+import { UserHousesRepo } from "../repository/UserHouseRepo";
 
-class UserController {
+class HouseController {
   async create(req: Request, res: Response) {
     try {
-      const new_user = new User();
-      new_user.name = req.body.name;
-      new_user.username = req.body.username,
-      new_user.password = req.body.password,
-      new_user.email = req.body.email,
-      new_user.type = req.body.type,
-      new_user.created_date = new Date(),
+        if(!req.body.house_residents){
+          res.status(400).json({
+              status: "Error",
+              message: "Cant create empty house!",
+            });
+        }
 
-      await new UsersRepo().save(new_user);
+      const new_house = new House();
+      new_house.house_name = req.body.house_name
 
+      const created_house = await new HousesRepo().save(new_house);
+
+      const houseResidents = req.body.shopping_list_items.map((item_info: { user_id:number }) => {
+        const new_user_house = new UserHouse();
+        new_user_house.user_id = item_info.user_id
+        new_user_house.house_id = created_house.house_id
+
+        return new_user_house;
+      });
+
+      await new UserHousesRepo().saveBulk(houseResidents);
+    
       res.status(201).json({
         status: "Created!",
-        message: "Successfully created user!",
+        message: "Successfully created house!",
       });
     } catch (err) {
         console.log(err)
@@ -31,11 +45,11 @@ class UserController {
   async delete(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      await new UsersRepo().delete(id);
+      await new HousesRepo().delete(id);
 
       res.status(200).json({
         status: "Ok!",
-        message: "Successfully deleted user!",
+        message: "Successfully deleted house!",
       });
     } catch (err) {
         console.log(err)
@@ -49,12 +63,12 @@ class UserController {
   async findById(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      const new_user = await new UsersRepo().retrieveById(id);
+      const new_house = await new HousesRepo().retrieveById(id);
 
       res.status(200).json({
         status: "Ok!",
-        message: "Successfully fetched user by id!",
-        data: new_user,
+        message: "Successfully fetched house by id!",
+        data: new_house,
       });
     } catch (err) {
         console.log(err)
@@ -67,12 +81,12 @@ class UserController {
 
   async findAll(req: Request, res: Response) {
     try {
-      const new_user = await new UsersRepo().retrieveAll();
+      const new_house = await new HousesRepo().retrieveAll();
 
       res.status(200).json({
         status: "Ok!",
-        message: "Successfully fetched all user data!",
-        data: new_user,
+        message: "Successfully fetched all house data!",
+        data: new_house,
       });
     } catch (err) {
         console.log(err)
@@ -86,24 +100,20 @@ class UserController {
   async update(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      const new_user = new User();
+      const new_house = new House();
 
-      new_user.id = id;
-      new_user.name = req.body.name;
-      new_user.username = req.body.username,
-      new_user.password = req.body.password,
-      new_user.email = req.body.email,
-      new_user.type = req.body.type,
+      new_house.id = id;
+      new_house.house_name = req.body.house_name
 
-      await new UsersRepo().update(new_user);
+      await new HousesRepo().update(new_house);
 
       res.status(200).json({
         status: "Ok!",
-        message: "Successfully updated user data!",
+        message: "Successfully updated house data!",
       });
     } catch (err) {
         console.log(err)
-      res.status(500).json({
+        res.status(500).json({
         status: "Internal Server Error!",
         message: "Internal Server Error!",
       });
@@ -111,4 +121,4 @@ class UserController {
   }
 }
 
-export default new UserController()
+export default new HouseController()

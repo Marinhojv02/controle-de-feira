@@ -12,13 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ShoppingListItem = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const ShoppingList_Model_1 = require("./ShoppingList.Model");
-const Product_Model_1 = require("./Product.Model");
+const HouseProduct_Model_1 = require("./HouseProduct.Model");
 let ShoppingListItem = class ShoppingListItem extends sequelize_typescript_1.Model {
 };
 exports.ShoppingListItem = ShoppingListItem;
 ShoppingListItem.ITEM_ID = 'item_id';
 ShoppingListItem.SHOPPING_LIST_ID = 'shopping_list_id';
-ShoppingListItem.PRODUCT_ID = 'product_id';
+ShoppingListItem.HOUSE_PRODUCT_ID = 'house_product_id';
 ShoppingListItem.QUANTITY = 'quantity';
 __decorate([
     (0, sequelize_typescript_1.Column)({
@@ -38,13 +38,13 @@ __decorate([
     __metadata("design:type", Number)
 ], ShoppingListItem.prototype, "shopping_list_id", void 0);
 __decorate([
-    (0, sequelize_typescript_1.ForeignKey)(() => Product_Model_1.Product),
+    (0, sequelize_typescript_1.ForeignKey)(() => HouseProduct_Model_1.HouseProduct),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.INTEGER,
-        field: ShoppingListItem.PRODUCT_ID,
+        field: ShoppingListItem.HOUSE_PRODUCT_ID,
     }),
     __metadata("design:type", Number)
-], ShoppingListItem.prototype, "product_id", void 0);
+], ShoppingListItem.prototype, "house_product_id", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.INTEGER,
@@ -58,9 +58,9 @@ __decorate([
     __metadata("design:type", ShoppingList_Model_1.ShoppingList)
 ], ShoppingListItem.prototype, "shoppingList", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => Product_Model_1.Product),
-    __metadata("design:type", Product_Model_1.Product)
-], ShoppingListItem.prototype, "product", void 0);
+    (0, sequelize_typescript_1.BelongsTo)(() => HouseProduct_Model_1.HouseProduct),
+    __metadata("design:type", HouseProduct_Model_1.HouseProduct)
+], ShoppingListItem.prototype, "houseProduct", void 0);
 exports.ShoppingListItem = ShoppingListItem = __decorate([
     (0, sequelize_typescript_1.Table)({
         tableName: 'ShoppingListItem',

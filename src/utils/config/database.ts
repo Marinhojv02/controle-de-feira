@@ -6,6 +6,8 @@ import { Product } from "../../model/Product.Model";
 import { ProductBuy } from "../../model/ProductBuy.Model";
 import { ShoppingList } from "../../model/ShoppingList.Model";
 import { ShoppingListItem } from "../../model/ShoppingListItem.Model";
+import { House } from "../../model/House.Model";
+import { HouseProduct } from "../../model/HouseProduct.Model";
 dotenv.config();
 
 
@@ -25,7 +27,8 @@ class Database {
       host:    Config.postgresql.POSTGRES_HOST,
       port:    Config.postgresql.POSTGRES_PORT,
       dialect: "postgres",
-      models:[User, Product, ProductBuy, ShoppingList, ShoppingListItem]
+      logging: false,
+      models:[User, Product, ProductBuy, ShoppingList, ShoppingListItem, House, HouseProduct],
     });
 
     await this.sequelize

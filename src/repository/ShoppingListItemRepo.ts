@@ -2,8 +2,9 @@ import { ShoppingListItem } from "../model/ShoppingListItem.Model";
 
 interface IShoppingListItems {
     save(shopping_list_item: ShoppingListItem): Promise<void>;
-    saveBulk(shopping_list_item: ShoppingListItem[]): Promise<void>;
+    saveBulk(shopping_list_item: ShoppingListItem[]): Promise<ShoppingListItem[]>;
     update(shopping_list_item: ShoppingListItem): Promise<void>;
+    updateMany(shopping_list_item: ShoppingListItem[]): Promise<void>;
     delete(shopping_list_itemId: number): Promise<void>;
     retrieveById(shopping_list_itemId: number): Promise<ShoppingListItem>;
     retrieveByShoppingListId(shopping_list_itemId: number): Promise<ShoppingListItem[]>;
@@ -15,50 +16,91 @@ export class ShoppingListItemsRepo implements IShoppingListItems {
         try {
             await ShoppingListItem.create({
                 shopping_list_id : shopping_list_item.shopping_list_id,
-                product_id : shopping_list_item.product_id,
+                house_product_id : shopping_list_item.house_product_id,
                 quantity : shopping_list_item.quantity,
             });
         } catch (error) {
-             throw new Error("Failed to create shopping_list_item!");
+            throw new Error("Failed to create shopping_list_item!");
         }
     }
-
-    async saveBulk(shoppingListItems: ShoppingListItem[]): Promise<void> {
+    
+    async saveBulk(shoppingListItems: ShoppingListItem[]): Promise<ShoppingListItem[]> {
       try {
         const shoppingListItemsData = shoppingListItems.map((item) => ({
           shopping_list_id: item.shopping_list_id,
-          product_id: item.product_id,
+          house_product_id: item.house_product_id,
           quantity: item.quantity,
         }));
     
-        await ShoppingListItem.bulkCreate(shoppingListItemsData);
+        return await ShoppingListItem.bulkCreate(shoppingListItemsData);
       } catch (error) {
-        throw new Error("Failed to create shopping_list_items!");
-      }
+          throw new Error("Failed to create shopping_list_items!");
+        }
     }
-
+    
     async update(shopping_list_item: ShoppingListItem): Promise<void> {
         try {
-          const new_shopping_list_item = await ShoppingListItem.findOne({
-            where: {
-                shopping_list_item_id: shopping_list_item.id,
-            },
-          });
-          if (!new_shopping_list_item) {
-            throw new Error("ShoppingListItem not found!");
-          }
+            const new_shopping_list_item = await ShoppingListItem.findOne({
+                where: {
+                    shopping_list_id: shopping_list_item.shopping_list_id,
+                    house_product_id: shopping_list_item.house_product_id,
+                },
+            });
+            if (!new_shopping_list_item) {
+                throw new Error("ShoppingListItem not found!");
+            }
           
-          new_shopping_list_item.shopping_list_id = shopping_list_item.shopping_list_id,
-          new_shopping_list_item.product_id = shopping_list_item.product_id,
-          new_shopping_list_item.quantity = shopping_list_item.quantity,
-
-
-          await new_shopping_list_item.save();
+            new_shopping_list_item.shopping_list_id = shopping_list_item.shopping_list_id,
+            new_shopping_list_item.house_product_id = shopping_list_item.house_product_id,
+            new_shopping_list_item.quantity = shopping_list_item.quantity,
+            
+            
+            await new_shopping_list_item.save();
         } catch (error) {
             console.log(error)
           throw new Error("Failed to update shopping_list_item!");
         }
-      }
+    }
+    
+    async updateMany(shopping_list_items: ShoppingListItem[]): Promise<void> {
+        const existingItems: ShoppingListItem[] = [];
+        const nonExistingItems: {shopping_list_id: number,house_product_id: number,quantity: number;}[] = [];
+        const savePromises: Promise<ShoppingListItem>[] = [];
+
+        for (const shopping_list_item of shopping_list_items) {
+            try {
+                const existingItem = await ShoppingListItem.findOne({
+                    where: {
+                        shopping_list_id: shopping_list_item.shopping_list_id,
+                        house_product_id: shopping_list_item.house_product_id,
+                    },
+                });
+    
+                if (existingItem) {
+                    existingItem.shopping_list_id = shopping_list_item.shopping_list_id;
+                    existingItem.house_product_id = shopping_list_item.house_product_id;
+                    existingItem.quantity = shopping_list_item.quantity;
+    
+                    existingItems.push(existingItem);
+                    savePromises.push(existingItem.save());
+                } else {
+                    const newItem = {
+                        shopping_list_id: shopping_list_item.shopping_list_id,
+                        house_product_id: shopping_list_item.house_product_id,
+                        quantity: shopping_list_item.quantity,
+                    };
+    
+                    nonExistingItems.push(newItem);
+                }
+            } catch (error) {
+                console.error(error);
+                throw new Error("Failed to update shopping_list_item(s)!");
+            }
+        }
+    
+        await Promise.all(savePromises);
+        await ShoppingListItem.bulkCreate(nonExistingItems);    
+    }
     
     async delete(shopping_list_itemId: number): Promise<void> {
         try {

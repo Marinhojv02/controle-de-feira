@@ -40,7 +40,7 @@ class UserController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let id = parseInt(req.params["id"]);
+                const id = parseInt(req.params["id"]);
                 yield new UsersRepo_1.UsersRepo().delete(id);
                 res.status(200).json({
                     status: "Ok!",
@@ -59,7 +59,7 @@ class UserController {
     findById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let id = parseInt(req.params["id"]);
+                const id = parseInt(req.params["id"]);
                 const new_user = yield new UsersRepo_1.UsersRepo().retrieveById(id);
                 res.status(200).json({
                     status: "Ok!",
@@ -98,7 +98,7 @@ class UserController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let id = parseInt(req.params["id"]);
+                const id = parseInt(req.params["id"]);
                 const new_user = new Users_Model_1.User();
                 new_user.id = id;
                 new_user.name = req.body.name;

@@ -1,7 +1,7 @@
 import { ShoppingList } from "../model/ShoppingList.Model";
 
 interface IShoppingLists {
-    save(shopping_list: ShoppingList): Promise<void>;
+    save(shopping_list: ShoppingList): Promise<ShoppingList>;
     update(shopping_list: ShoppingList): Promise<void>;
     delete(shopping_listId: number): Promise<void>;
     retrieveById(shopping_listId: number): Promise<ShoppingList>;
@@ -9,13 +9,15 @@ interface IShoppingLists {
 }
 
 export class ShoppingListsRepo implements IShoppingLists {
-    async save(shopping_list: ShoppingList): Promise<void> {
+    async save(shopping_list: ShoppingList): Promise<ShoppingList> {
         try {
-            await ShoppingList.create({
+            const created_shopping_list = await ShoppingList.create({
               creation_date: shopping_list.creation_date,
+              user_id: shopping_list.user_id,
               is_custom: shopping_list.is_custom,
               is_complete: shopping_list.is_complete,
             });
+            return created_shopping_list;
         } catch (error) {
              throw new Error("Failed to create shopping_list!");
         }
@@ -32,7 +34,7 @@ export class ShoppingListsRepo implements IShoppingLists {
             throw new Error("ShoppingList not found!");
           }
           
-          new_shopping_list.creation_date = shopping_list.creation_date,
+          new_shopping_list.user_id = shopping_list.user_id,
           new_shopping_list.is_custom = shopping_list.is_custom,
           new_shopping_list.is_complete = shopping_list.is_complete,
 

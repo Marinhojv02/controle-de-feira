@@ -7,6 +7,8 @@ const express_1 = __importDefault(require("express"));
 const database_1 = __importDefault(require("./utils/config/database"));
 //routers
 const User_Routes_1 = __importDefault(require("./routes/User.Routes"));
+const Products_Routes_1 = __importDefault(require("./routes/Products.Routes"));
+const ShoppingList_Routes_1 = __importDefault(require("./routes/ShoppingList.Routes"));
 class App {
     constructor() {
         this.app = (0, express_1.default)();
@@ -23,6 +25,8 @@ class App {
             res.send("Welcome home");
         });
         this.app.use("/user", User_Routes_1.default);
+        this.app.use("/product", Products_Routes_1.default);
+        this.app.use("/shopping_list", ShoppingList_Routes_1.default);
     }
     databaseSync() {
         var _a;

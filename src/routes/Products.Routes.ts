@@ -13,8 +13,7 @@ class ProductRoutes extends BaseRoutes {
     );
     this.router.delete("/:id", ProductController.delete);
     this.router.get("", ProductController.findAll);
-    this.router.get("/:id", ProductController.findById);
-    this.router.get("/low_stock", ProductController.getLowStock);
+    this.router.get("/:id(\\d+)", ProductController.findById);
   }
 }
 

@@ -7,7 +7,6 @@ interface IProducts {
     delete(productId: number): Promise<void>;
     retrieveById(productId: number): Promise<Product>;
     retrieveAll(): Promise<Product[]>;
-    retrieveLowStock(): Promise<Product[]>;
 }
 
 export class ProductsRepo implements IProducts {
@@ -18,8 +17,6 @@ export class ProductsRepo implements IProducts {
               product_name: product.product_name,
               description: product.description,
               category: product.category,
-              quantity_in_stock: product.quantity_in_stock,
-              reorder_point: product.reorder_point,
           });
       } catch (error) {
             throw new Error("Failed to create product!");
@@ -40,8 +37,6 @@ export class ProductsRepo implements IProducts {
         new_product.product_name = product.product_name,
         new_product.description = product.description,
         new_product.category = product.category,
-        new_product.quantity_in_stock = product.quantity_in_stock,
-        new_product.reorder_point = product.reorder_point,
 
         await new_product.save();
       } catch (error) {
@@ -89,21 +84,5 @@ export class ProductsRepo implements IProducts {
       } catch (error) {
         throw new Error("Failed to retrieve product!");
       }
-    }
-
-    async retrieveLowStock(): Promise<Product[]> {
-      try {
-        const products = await Product.findAll({
-          where: {
-            quantity_in_stock: {
-              [Op.lt]: Sequelize.col('reorder_point')
-            }
-          }
-        });
-        return products;
-      } catch (error) {
-        throw new Error("Failed to retrieve products!");
-      }
-    }
-    
+    }    
 }

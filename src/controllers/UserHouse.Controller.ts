@@ -104,6 +104,25 @@ class ProductController {
       });
     }
   }
+
+//   async getLowStock(req: Request, res: Response) {
+//     console.log('entra aqui')
+//     try {
+//       const product = await new ProductsRepo().retrieveLowStock();
+      
+//       res.status(200).json({
+//         status: "Ok!",
+//         message: "Successfully fetched product data!",
+//         data:product
+//       });
+//     } catch (err) {
+//         console.log(err)
+//         res.status(500).json({
+//         status: "Internal Server Error!",
+//         message: "Internal Server Error!",
+//       });
+//     }
+//   }
 }
 
 export default new ProductController()

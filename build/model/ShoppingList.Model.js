@@ -20,6 +20,7 @@ ShoppingList.SHOPPING_LIST_ID = 'shopping_list_id';
 ShoppingList.USER_ID = 'user_id';
 ShoppingList.CREATION_DATE = 'creation_date';
 ShoppingList.IS_CUSTOM = 'is_custom';
+ShoppingList.IS_COMPLETE = 'is_complete';
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.INTEGER,
@@ -53,6 +54,14 @@ __decorate([
     }),
     __metadata("design:type", Boolean)
 ], ShoppingList.prototype, "is_custom", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.BOOLEAN,
+        allowNull: false,
+        field: ShoppingList.IS_COMPLETE,
+    }),
+    __metadata("design:type", Boolean)
+], ShoppingList.prototype, "is_complete", void 0);
 __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => Users_Model_1.User),
     __metadata("design:type", Users_Model_1.User)

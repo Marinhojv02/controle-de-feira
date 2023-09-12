@@ -39,6 +39,12 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const config_1 = __importDefault(require("./config"));
 const dotenv = __importStar(require("dotenv"));
 const Users_Model_1 = require("../../model/Users.Model");
+const Product_Model_1 = require("../../model/Product.Model");
+const ProductBuy_Model_1 = require("../../model/ProductBuy.Model");
+const ShoppingList_Model_1 = require("../../model/ShoppingList.Model");
+const ShoppingListItem_Model_1 = require("../../model/ShoppingListItem.Model");
+const House_Model_1 = require("../../model/House.Model");
+const HouseProduct_Model_1 = require("../../model/HouseProduct.Model");
 dotenv.config();
 class Database {
     constructor() {
@@ -53,7 +59,7 @@ class Database {
                 host: config_1.default.postgresql.POSTGRES_HOST,
                 port: config_1.default.postgresql.POSTGRES_PORT,
                 dialect: "postgres",
-                models: [Users_Model_1.User]
+                models: [Users_Model_1.User, Product_Model_1.Product, ProductBuy_Model_1.ProductBuy, ShoppingList_Model_1.ShoppingList, ShoppingListItem_Model_1.ShoppingListItem, House_Model_1.House, HouseProduct_Model_1.HouseProduct]
             });
             yield this.sequelize
                 .authenticate()

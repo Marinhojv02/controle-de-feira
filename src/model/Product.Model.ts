@@ -4,9 +4,9 @@ import { Model, Table, Column, DataType } from 'sequelize-typescript';
   tableName: 'Product',
   indexes: [
     {
-      name: 'product_name_category_unique',
+      name: 'product_name_unique',
       unique: true,
-      fields: ['product_name', 'category'],
+      fields: ['product_name'],
     },
   ],
 })
@@ -15,8 +15,6 @@ export class Product extends Model {
   public static PRODUCT_NAME = 'product_name' as string;
   public static DESCRIPTION = 'description' as string;
   public static CATEGORY = 'category' as string;
-  public static QUANTITY_IN_STOCK = 'quantity_in_stock' as string;
-  public static REORDER_POINT = 'reorder_point' as string;
 
   @Column({
     type: DataType.INTEGER,
@@ -41,20 +39,8 @@ export class Product extends Model {
 
   @Column({
     type: DataType.STRING(100),
+    allowNull: false,
     field: Product.CATEGORY,
   })
   category!: string;
-
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-    field: Product.QUANTITY_IN_STOCK,
-  })
-  quantity_in_stock!: number;
-
-  @Column({
-    type: DataType.INTEGER,
-    field: Product.REORDER_POINT,
-  })
-  reorder_point!: number;
 }

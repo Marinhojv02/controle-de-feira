@@ -1,6 +1,6 @@
 import { Model, Table, Column, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { ShoppingList } from './ShoppingList.Model';
-import { Product } from './Product.Model';
+import { HouseProduct } from './HouseProduct.Model';
 
 @Table({
   tableName: 'ShoppingListItem',
@@ -8,7 +8,7 @@ import { Product } from './Product.Model';
 export class ShoppingListItem extends Model {
   public static ITEM_ID = 'item_id' as string;
   public static SHOPPING_LIST_ID = 'shopping_list_id' as string;
-  public static PRODUCT_ID = 'product_id' as string;
+  public static HOUSE_PRODUCT_ID = 'house_product_id' as string;
   public static QUANTITY = 'quantity' as string;
 
   @Column({
@@ -26,12 +26,12 @@ export class ShoppingListItem extends Model {
   })
   shopping_list_id!: number;
 
-  @ForeignKey(() => Product)
+  @ForeignKey(() => HouseProduct)
   @Column({
     type: DataType.INTEGER,
-    field: ShoppingListItem.PRODUCT_ID,
+    field: ShoppingListItem.HOUSE_PRODUCT_ID,
   })
-  product_id!: number;
+  house_product_id!: number;
 
   @Column({
     type: DataType.INTEGER,
@@ -43,6 +43,6 @@ export class ShoppingListItem extends Model {
   @BelongsTo(() => ShoppingList)
   shoppingList!: ShoppingList;
 
-  @BelongsTo(() => Product)
-  product!: Product;
+  @BelongsTo(() => HouseProduct)
+  houseProduct!: HouseProduct;
 }

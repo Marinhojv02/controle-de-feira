@@ -13,7 +13,7 @@ class ShoppingListController {
       new_shopping_list.is_complete = req.body.shopping_list.is_complete
       new_shopping_list.creation_date = new Date();
       
-      await new ShoppingListsRepo().save(new_shopping_list);
+      const savedShoppingList = await new ShoppingListsRepo().save(new_shopping_list);
 
       if(!req.body.shopping_list_items){
         res.status(201).json({
@@ -22,10 +22,10 @@ class ShoppingListController {
         });  
       }
 
-      const shoppingListItems = req.body.shopping_list_items.map((item_info: { shopping_list_id: number; product_id: number; quantity: number; }) => {
+      const shoppingListItems = req.body.shopping_list_items.map((item_info: { shopping_list_id: number; house_product_id: number; quantity: number; }) => {
         const new_item = new ShoppingListItem();
-        new_item.shopping_list_id = item_info.shopping_list_id;
-        new_item.product_id = item_info.product_id;
+        new_item.shopping_list_id = savedShoppingList.shopping_list_id;
+        new_item.house_product_id = item_info.house_product_id;
         new_item.quantity = item_info.quantity;
         return new_item;
       });
@@ -47,7 +47,7 @@ class ShoppingListController {
 
   async delete(req: Request, res: Response) {
     try {
-      let id = parseInt(req.params["id"]);
+      const id = parseInt(req.params["id"]);
       await new ShoppingListsRepo().delete(id);
 
       res.status(200).json({
@@ -65,7 +65,7 @@ class ShoppingListController {
 
   async deleteItem(req: Request, res: Response) {
     try {
-      let id = parseInt(req.params["id"]);
+      const id = parseInt(req.params["id"]);
       await new ShoppingListItemsRepo().delete(id);
 
       res.status(200).json({
@@ -83,7 +83,7 @@ class ShoppingListController {
 
   async findById(req: Request, res: Response) {
     try {
-      let id = parseInt(req.params["id"]);
+      const id = parseInt(req.params["id"]);
       const shopping_list = await new ShoppingListsRepo().retrieveById(id);
       const products = await new ShoppingListItemsRepo().retrieveByShoppingListId(id)
 
@@ -122,7 +122,7 @@ class ShoppingListController {
 
   async updateShoppingList(req: Request, res: Response) {
     try {
-      let id = parseInt(req.params["id"]);
+      const id = parseInt(req.params["id"]);
       const new_shopping_list = new ShoppingList();
 
       new_shopping_list.id = id;
@@ -130,12 +130,28 @@ class ShoppingListController {
       new_shopping_list.is_custom = req.body.shopping_list.is_custom
       new_shopping_list.is_complete = req.body.shopping_list.is_complete
  
-
       await new ShoppingListsRepo().update(new_shopping_list);
+
+      if(!req.body.shopping_list_items){
+        res.status(201).json({
+          status: "Created!",
+          message: "Successfully created updated shopping list data!",
+        });  
+      }
+
+      const shoppingListItems = req.body.shopping_list_items.map((item_info: { shopping_list_id: number; house_product_id: number; quantity: number; }) => {
+        const new_item = new ShoppingListItem();
+        new_item.shopping_list_id = id;
+        new_item.house_product_id = item_info.house_product_id;
+        new_item.quantity = item_info.quantity;
+        return new_item;
+      });
+
+      await new ShoppingListItemsRepo().updateMany(shoppingListItems);
 
       res.status(200).json({
         status: "Ok!",
-        message: "Successfully updated shopping list data!",
+        message: "Successfully updated shopping list and shopping list items data!",
       });
     } catch (err) {
         console.log(err)
@@ -148,12 +164,12 @@ class ShoppingListController {
 
   async updateShoppingListItem(req: Request, res: Response) {
     try {
-      let id = parseInt(req.params["id"]);
+      const id = parseInt(req.params["id"]);
       const new_shopping_list_item = new ShoppingListItem();
 
       new_shopping_list_item.id = id;
       new_shopping_list_item.shopping_list_id = req.body.shopping_list.shopping_list_id
-      new_shopping_list_item.product_id = req.body.shopping_list.product_id
+      new_shopping_list_item.house_product_id = req.body.shopping_list.house_product_id
       new_shopping_list_item.quantity = req.body.shopping_list.quantity
 
       await new ShoppingListItem().update(new_shopping_list_item);

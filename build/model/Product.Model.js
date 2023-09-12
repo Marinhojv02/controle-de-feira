@@ -18,8 +18,6 @@ Product.PRODUCT_ID = 'product_id';
 Product.PRODUCT_NAME = 'product_name';
 Product.DESCRIPTION = 'description';
 Product.CATEGORY = 'category';
-Product.QUANTITY_IN_STOCK = 'quantity_in_stock';
-Product.REORDER_POINT = 'reorder_point';
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.INTEGER,
@@ -47,33 +45,19 @@ __decorate([
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.STRING(100),
+        allowNull: false,
         field: Product.CATEGORY,
     }),
     __metadata("design:type", String)
 ], Product.prototype, "category", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.INTEGER,
-        allowNull: false,
-        field: Product.QUANTITY_IN_STOCK,
-    }),
-    __metadata("design:type", Number)
-], Product.prototype, "quantity_in_stock", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.INTEGER,
-        field: Product.REORDER_POINT,
-    }),
-    __metadata("design:type", Number)
-], Product.prototype, "reorder_point", void 0);
 exports.Product = Product = __decorate([
     (0, sequelize_typescript_1.Table)({
         tableName: 'Product',
         indexes: [
             {
-                name: 'product_name_category_unique',
+                name: 'product_name_unique',
                 unique: true,
-                fields: ['product_name', 'category'],
+                fields: ['product_name'],
             },
         ],
     })
