@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { HouseProductsRepo } from "../repository/HouseProductRepo";
 import { HouseProduct } from "../model/HouseProduct.Model";
+import HouseProductUsecase from "../usecases/HouseProduct.Usecase";
 
 class HouseProductController {
   async create(req: Request, res: Response) {
@@ -67,7 +68,7 @@ class HouseProductController {
 
   async findAll(req: Request, res: Response) {
     try {
-      const new_houseProduct = await new HouseProductsRepo().retrieveAll();
+      const new_houseProduct = await HouseProductUsecase.findAll();
 
       res.status(200).json({
         status: "Ok!",
@@ -86,16 +87,7 @@ class HouseProductController {
   async update(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      const new_houseProduct = new HouseProduct();
-
-      new_houseProduct.id = id;
-      new_houseProduct.product_id = req.body.product_id
-      new_houseProduct.house_id = req.body.house_id
-      new_houseProduct.quantity_in_stock = req.body.quantity_in_stock
-      new_houseProduct.reorder_point = req.body.reorder_point
-      new_houseProduct.recommended_quantity = req.body.recommended_quantity
-
-      await new HouseProductsRepo().update(new_houseProduct);
+      await HouseProductUsecase.update(id, req.body.product_id, req.body.house_id, req.body.quantity_in_stock, req.body.reorder_point, req.body.recommended_quantity);
 
       res.status(200).json({
         status: "Ok!",
@@ -113,7 +105,7 @@ class HouseProductController {
   async getLowStock(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      const lowStockProducts = await new HouseProductsRepo().retrieveLowStock(id);
+      const lowStockProducts = await HouseProductUsecase.getLowStock(id);
       
       res.status(200).json({
         status: "Ok!",

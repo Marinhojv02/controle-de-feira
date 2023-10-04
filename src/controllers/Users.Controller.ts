@@ -1,26 +1,23 @@
 import { Request, Response } from "express";
-import { UsersRepo } from "../repository/UsersRepo";
-import { User } from "../model/Users.Model";
+import { UserUsecases } from "../usecases/Users.Usecase";
 
 class UserController {
   async create(req: Request, res: Response) {
     try {
-      const new_user = new User();
-      new_user.name = req.body.name;
-      new_user.username = req.body.username,
-      new_user.password = req.body.password,
-      new_user.email = req.body.email,
-      new_user.type = req.body.type,
-      new_user.created_date = new Date(),
-
-      await new UsersRepo().save(new_user);
+      await new UserUsecases().createUser(
+        req.body.name,
+        req.body.username,
+        req.body.password,
+        req.body.email,
+        req.body.type
+      );
 
       res.status(201).json({
         status: "Created!",
         message: "Successfully created user!",
       });
     } catch (err) {
-        console.log(err)
+      console.log(err);
       res.status(500).json({
         status: "Internal Server Error!",
         message: "Internal Server Error!",
@@ -28,37 +25,50 @@ class UserController {
     }
   }
 
-  async delete(req: Request, res: Response) {
+  async login(req: Request, res: Response) {
     try {
-      const id = parseInt(req.params["id"]);
-      await new UsersRepo().delete(id);
-
-      res.status(200).json({
-        status: "Ok!",
-        message: "Successfully deleted user!",
-      });
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({
-        status: "Internal Server Error!",
-        message: "Internal Server Error!",
-      });
+      const token = await new UserUsecases().login(
+        req.body.username, req.body.password
+        );
+      res.status(200).json({ token });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ message: "An error occurred while registering user" });
     }
   }
 
   async findById(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      const new_user = await new UsersRepo().retrieveById(id);
-
+        const new_user = await new UserUsecases().findById(id)
       res.status(200).json({
         status: "Ok!",
         message: "Successfully fetched user by id!",
         data: new_user,
       });
     } catch (err) {
-        console.log(err)
-        res.status(500).json({
+      console.log(err);
+      res.status(500).json({
+        status: "Internal Server Error!",
+        message: "Internal Server Error!",
+      });
+    }
+  }
+
+  async findByUsername(req: Request, res: Response) {
+    try {
+      const username = req.body.username;
+      const new_user = await new UserUsecases().findByUsername(username)
+      res.status(200).json({
+        status: "Ok!",
+        message: "Successfully fetched user by username!",
+        data: new_user,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
         status: "Internal Server Error!",
         message: "Internal Server Error!",
       });
@@ -67,16 +77,15 @@ class UserController {
 
   async findAll(req: Request, res: Response) {
     try {
-      const new_user = await new UsersRepo().retrieveAll();
-
+        const new_user = await new UserUsecases().findAll()
       res.status(200).json({
         status: "Ok!",
         message: "Successfully fetched all user data!",
         data: new_user,
       });
     } catch (err) {
-        console.log(err)
-        res.status(500).json({
+      console.log(err);
+      res.status(500).json({
         status: "Internal Server Error!",
         message: "Internal Server Error!",
       });
@@ -86,23 +95,14 @@ class UserController {
   async update(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      const new_user = new User();
-
-      new_user.id = id;
-      new_user.name = req.body.name;
-      new_user.username = req.body.username,
-      new_user.password = req.body.password,
-      new_user.email = req.body.email,
-      new_user.type = req.body.type,
-
-      await new UsersRepo().update(new_user);
+      await new UserUsecases().update(id, req.body.name, req.body.username, req.body.password, req.body.email, req.body.type)
 
       res.status(200).json({
         status: "Ok!",
         message: "Successfully updated user data!",
       });
     } catch (err) {
-        console.log(err)
+      console.log(err);
       res.status(500).json({
         status: "Internal Server Error!",
         message: "Internal Server Error!",
@@ -111,4 +111,4 @@ class UserController {
   }
 }
 
-export default new UserController()
+export default new UserController();

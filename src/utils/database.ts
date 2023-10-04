@@ -1,13 +1,13 @@
 import { Sequelize } from "sequelize-typescript";
 import Config from "./config"
 import * as dotenv from "dotenv";
-import { User } from "../../model/Users.Model"
-import { Product } from "../../model/Product.Model";
-import { ProductBuy } from "../../model/ProductBuy.Model";
-import { ShoppingList } from "../../model/ShoppingList.Model";
-import { ShoppingListItem } from "../../model/ShoppingListItem.Model";
-import { House } from "../../model/House.Model";
-import { HouseProduct } from "../../model/HouseProduct.Model";
+import { User } from "../model/Users.Model"
+import { Product } from "../model/Product.Model";
+import { ProductBuy } from "../model/ProductBuy.Model";
+import { ShoppingList } from "../model/ShoppingList.Model";
+import { ShoppingListItem } from "../model/ShoppingListItem.Model";
+import { House } from "../model/House.Model";
+import { HouseProduct } from "../model/HouseProduct.Model";
 dotenv.config();
 
 

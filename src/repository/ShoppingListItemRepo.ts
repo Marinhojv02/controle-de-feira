@@ -1,10 +1,11 @@
+import { Sequelize, Op } from "sequelize";
 import { ShoppingListItem } from "../model/ShoppingListItem.Model";
 
 interface IShoppingListItems {
     save(shopping_list_item: ShoppingListItem): Promise<void>;
     saveBulk(shopping_list_item: ShoppingListItem[]): Promise<ShoppingListItem[]>;
     update(shopping_list_item: ShoppingListItem): Promise<void>;
-    updateMany(shopping_list_item: ShoppingListItem[]): Promise<void>;
+    updateBulk(shopping_list_item: ShoppingListItem[]): Promise<void>;
     delete(shopping_list_itemId: number): Promise<void>;
     retrieveById(shopping_list_itemId: number): Promise<ShoppingListItem>;
     retrieveByShoppingListId(shopping_list_itemId: number): Promise<ShoppingListItem[]>;
@@ -62,7 +63,7 @@ export class ShoppingListItemsRepo implements IShoppingListItems {
         }
     }
     
-    async updateMany(shopping_list_items: ShoppingListItem[]): Promise<void> {
+    async updateBulk(shopping_list_items: ShoppingListItem[]): Promise<void> {
         const existingItems: ShoppingListItem[] = [];
         const nonExistingItems: {shopping_list_id: number,house_product_id: number,quantity: number;}[] = [];
         const savePromises: Promise<ShoppingListItem>[] = [];
@@ -80,9 +81,13 @@ export class ShoppingListItemsRepo implements IShoppingListItems {
                     existingItem.shopping_list_id = shopping_list_item.shopping_list_id;
                     existingItem.house_product_id = shopping_list_item.house_product_id;
                     existingItem.quantity = shopping_list_item.quantity;
-    
+                    
                     existingItems.push(existingItem);
-                    savePromises.push(existingItem.save());
+                    if(existingItem.quantity == 0){
+                        existingItem.destroy();
+                    }else{
+                        savePromises.push(existingItem.save());
+                    }
                 } else {
                     const newItem = {
                         shopping_list_id: shopping_list_item.shopping_list_id,

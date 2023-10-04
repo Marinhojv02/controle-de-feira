@@ -1,42 +1,19 @@
 import { Request, Response } from "express";
 import { ProductsRepo } from "../repository/ProductRepo";
 import { Product } from "../model/Product.Model";
+import ProductUsecase from "../usecases/Product.Usecase";
 
 class ProductController {
   async create(req: Request, res: Response) {
     try {
-      const new_product = new Product();
-      new_product.product_name = req.body.product_name
-      new_product.description = req.body.description
-      new_product.category = req.body.category
-
-      await new ProductsRepo().save(new_product);
-
+      await ProductUsecase.create(req.body);
       res.status(201).json({
         status: "Created!",
         message: "Successfully created product!",
       });
     } catch (err) {
-        console.log(err)
+      console.log(err);
       res.status(500).json({
-        status: "Internal Server Error!",
-        message: "Internal Server Error!",
-      });
-    }
-  }
-
-  async delete(req: Request, res: Response) {
-    try {
-      const id = parseInt(req.params["id"]);
-      await new ProductsRepo().delete(id);
-
-      res.status(200).json({
-        status: "Ok!",
-        message: "Successfully deleted product!",
-      });
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({
         status: "Internal Server Error!",
         message: "Internal Server Error!",
       });
@@ -46,7 +23,7 @@ class ProductController {
   async findById(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      const new_product = await new ProductsRepo().retrieveById(id);
+      const new_product = await ProductUsecase.findById(id);
 
       res.status(200).json({
         status: "Ok!",
@@ -54,8 +31,26 @@ class ProductController {
         data: new_product,
       });
     } catch (err) {
-        console.log(err)
-        res.status(500).json({
+      console.log(err);
+      res.status(500).json({
+        status: "Internal Server Error!",
+        message: "Internal Server Error!",
+      });
+    }
+  }
+
+  async findByName(req: Request, res: Response) {
+    try {
+    const new_product = await ProductUsecase.findByName(req.body.productName);
+
+      res.status(200).json({
+        status: "Ok!",
+        message: "Successfully fetched product by id!",
+        data: new_product,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
         status: "Internal Server Error!",
         message: "Internal Server Error!",
       });
@@ -64,7 +59,7 @@ class ProductController {
 
   async findAll(req: Request, res: Response) {
     try {
-      const new_product = await new ProductsRepo().retrieveAll();
+      const new_product = await ProductUsecase.findAll();
 
       res.status(200).json({
         status: "Ok!",
@@ -72,8 +67,8 @@ class ProductController {
         data: new_product,
       });
     } catch (err) {
-        console.log(err)
-        res.status(500).json({
+      console.log(err);
+      res.status(500).json({
         status: "Internal Server Error!",
         message: "Internal Server Error!",
       });
@@ -83,22 +78,15 @@ class ProductController {
   async update(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      const new_product = new Product();
-
-      new_product.id = id;
-      new_product.product_name = req.body.product_name
-      new_product.description = req.body.description
-      new_product.category = req.body.category
-
-      await new ProductsRepo().update(new_product);
+      await ProductUsecase.update(id, req.body.product_name, req.body.description, req.body.category);
 
       res.status(200).json({
         status: "Ok!",
         message: "Successfully updated product data!",
       });
     } catch (err) {
-        console.log(err)
-        res.status(500).json({
+      console.log(err);
+      res.status(500).json({
         status: "Internal Server Error!",
         message: "Internal Server Error!",
       });
@@ -106,4 +94,4 @@ class ProductController {
   }
 }
 
-export default new ProductController()
+export default new ProductController();

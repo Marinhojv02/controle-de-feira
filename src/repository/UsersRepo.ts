@@ -5,6 +5,7 @@ interface IUsers {
     update(user: User): Promise<void>;
     delete(userId: number): Promise<void>;
     retrieveById(userId: number): Promise<User>;
+    retrieveByUsername(username: string): Promise<User>;
     retrieveAll(): Promise<User[]>;
 }
 
@@ -76,6 +77,22 @@ export class UsersRepo implements IUsers {
           throw new Error("Failed to retrieve users!");
         }
       }
+      
+      async retrieveByUsername(username: string): Promise<User> {
+        try {
+            const new_user = await User.findOne({
+              where: {
+                  username: username,
+              },
+            });
+            if (!new_user) {
+              throw new Error("Users not found!");
+            }
+            return new_user;
+          } catch (error) {
+            throw new Error("Failed to retrieve users!");
+          }      }
+
       async retrieveAll(): Promise<User[]> {
         try {
          return await User.findAll();

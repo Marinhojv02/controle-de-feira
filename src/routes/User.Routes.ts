@@ -1,6 +1,6 @@
 import BaseRoutes from "./base/BaseRouter";
 import { createUserSchema, updateUserSchema } from "../schema/User.Schema";
-import UserController from "../controllers/User.Controller";
+import UserController from "../controllers/Users.Controller";
 import validate from "../helper/validate";
 
 class NoteRoutes extends BaseRoutes {

@@ -1,5 +1,5 @@
 import express, { Application, Request, Response } from "express";
-import Database from "./utils/config/database";
+import Database from "./utils/database";
 //routers
 import UserRoutes from "./routes/User.Routes";
 import ProductRoutes from "./routes/Products.Routes";

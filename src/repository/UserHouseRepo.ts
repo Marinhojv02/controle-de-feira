@@ -3,13 +3,29 @@ import { UserHouse } from "../model/UserHouse.Model";
 interface IUserHouses {
     save(userHouse: UserHouse): Promise<UserHouse>;
     saveBulk(userHouse: UserHouse[]): Promise<UserHouse[]>;
-    delete(userHouse: UserHouse): Promise<void>;
-    retrieveByUserId(userHouseId: number): Promise<UserHouse[]>;
-    retrieveByHouseId(userHouseId: number): Promise<UserHouse[]>;
+    delete(userHouseId: number): Promise<void>;
+    deleteBulk(userHouseId: number): Promise<void>;
+    retrieveByUserHouseId(user_house_id: number): Promise<UserHouse[]>;
+    retrieveByUserId(userId: number): Promise<UserHouse[]>;
+    retrieveByHouseId(houseId: number): Promise<UserHouse[]>;
     retrieveAll(): Promise<UserHouse[]>;
 }
 
 export class UserHousesRepo implements IUserHouses {
+    async deleteBulk(userHouseId: number): Promise<void> {
+        try{
+            const condition_to_delete = {
+                where: {
+                    user_house_id: userHouseId,
+                },
+            };
+
+            await UserHouse.destroy(condition_to_delete);
+        }catch(err){
+
+        }
+        throw new Error("Method not implemented.");
+    }
     
     async save(userHouse: UserHouse): Promise<UserHouse> {
       try {
@@ -36,14 +52,14 @@ export class UserHousesRepo implements IUserHouses {
         }
       }
 
-    async delete(userHouse: UserHouse): Promise<void> {
+    async delete(userHouseId: number): Promise<void> {
         try {
             const new_userHouse = await UserHouse.findOne({
                 where: {
-                    user_id: userHouse.user_id,
-                    house_id: userHouse.house_id,
+                    user_house_id: userHouseId,
                 },
             });
+
             if (!new_userHouse) {
                 throw new Error("UserHouse not found!");
             }
@@ -68,6 +84,22 @@ export class UserHousesRepo implements IUserHouses {
         } catch (error) {
             throw new Error("Failed to retrieve userHouses!");
         }    
+    }
+
+    async retrieveByUserHouseId(user_house_id: number): Promise<UserHouse[]> {
+        try {
+            const new_userHouse = await UserHouse.findAll({
+                where: {
+                    user_house_id: user_house_id,
+                },
+            });
+            if (!new_userHouse) {
+                throw new Error("UserHouses not found!");
+            }
+            return new_userHouse;
+        } catch (error) {
+            throw new Error("Failed to retrieve userHouses!");
+        }        
     }
     
     async retrieveByHouseId(houseId: number): Promise<UserHouse[]> {

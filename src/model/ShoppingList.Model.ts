@@ -11,6 +11,7 @@ export class ShoppingList extends Model {
   public static CREATION_DATE = 'creation_date' as string;
   public static IS_CUSTOM = 'is_custom' as string;
   public static IS_COMPLETE = 'is_complete' as string;
+  public static IS_ACTIVE = 'is_active' as string;
 
   @Column({
     type: DataType.INTEGER,
@@ -47,6 +48,14 @@ export class ShoppingList extends Model {
     field: ShoppingList.IS_COMPLETE,
   })
   is_complete!: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    field: ShoppingList.IS_ACTIVE,
+    defaultValue:true
+  })
+  is_active!: boolean;
 
   @BelongsTo(() => User)
   user!: User;

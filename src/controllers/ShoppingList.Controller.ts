@@ -1,19 +1,11 @@
 import { Request, Response } from "express";
-import { ShoppingListItem } from "../model/ShoppingListItem.Model";
-import { ShoppingListItemsRepo } from "../repository/ShoppingListItemRepo";
-import { ShoppingListsRepo } from "../repository/ShoppingListRepo";
-import { ShoppingList } from "../model/ShoppingList.Model";
+import ShoppingListItemUsecase from "../usecases/ShoppingListItem.Usecase";
+import ShoppingListUsecase from "../usecases/ShoppingList.Usecase";
 
 class ShoppingListController {
   async create(req: Request, res: Response) {
     try {
-      const new_shopping_list = new ShoppingList();
-      new_shopping_list.user_id = req.body.shopping_list.user_id
-      new_shopping_list.is_custom = req.body.shopping_list.is_custom
-      new_shopping_list.is_complete = req.body.shopping_list.is_complete
-      new_shopping_list.creation_date = new Date();
-      
-      const savedShoppingList = await new ShoppingListsRepo().save(new_shopping_list);
+      const savedShoppingList = await ShoppingListUsecase.create(req.body)
 
       if(!req.body.shopping_list_items){
         res.status(201).json({
@@ -22,15 +14,7 @@ class ShoppingListController {
         });  
       }
 
-      const shoppingListItems = req.body.shopping_list_items.map((item_info: { shopping_list_id: number; house_product_id: number; quantity: number; }) => {
-        const new_item = new ShoppingListItem();
-        new_item.shopping_list_id = savedShoppingList.shopping_list_id;
-        new_item.house_product_id = item_info.house_product_id;
-        new_item.quantity = item_info.quantity;
-        return new_item;
-      });
-
-      await new ShoppingListItemsRepo().saveBulk(shoppingListItems);
+      const shopping_list_items = await ShoppingListItemUsecase.saveBulk(req.body.shopping_list_items, savedShoppingList)
 
       res.status(201).json({
         status: "Created!",
@@ -48,8 +32,7 @@ class ShoppingListController {
   async delete(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      await new ShoppingListsRepo().delete(id);
-
+      await ShoppingListUsecase.delete(id); 
       res.status(200).json({
         status: "Ok!",
         message: "Successfully deleted shopping list!",
@@ -63,29 +46,11 @@ class ShoppingListController {
     }
   }
 
-  async deleteItem(req: Request, res: Response) {
-    try {
-      const id = parseInt(req.params["id"]);
-      await new ShoppingListItemsRepo().delete(id);
-
-      res.status(200).json({
-        status: "Ok!",
-        message: "Successfully deleted shopping list item!",
-      });
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({
-        status: "Internal Server Error!",
-        message: "Internal Server Error!",
-      });
-    }
-  }
-
   async findById(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      const shopping_list = await new ShoppingListsRepo().retrieveById(id);
-      const products = await new ShoppingListItemsRepo().retrieveByShoppingListId(id)
+      const shopping_list = await ShoppingListUsecase.findById(id);
+      const products = await ShoppingListItemUsecase.retrieveByShoppingListId(id)
 
       res.status(200).json({
         status: "Ok!",
@@ -104,7 +69,7 @@ class ShoppingListController {
 
   async findAll(req: Request, res: Response) {
     try {
-      const shopping_lists = await new ShoppingListsRepo().retrieveAll();
+      const shopping_lists = await ShoppingListUsecase.findAll();
 
       res.status(200).json({
         status: "Ok!",
@@ -123,33 +88,17 @@ class ShoppingListController {
   async updateShoppingList(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      const new_shopping_list = new ShoppingList();
-
-      new_shopping_list.id = id;
-      new_shopping_list.user_id = req.body.shopping_list.user_id
-      new_shopping_list.is_custom = req.body.shopping_list.is_custom
-      new_shopping_list.is_complete = req.body.shopping_list.is_complete
- 
-      await new ShoppingListsRepo().update(new_shopping_list);
+      await ShoppingListUsecase.updateShoppingList(id, req.body.shopping_list.user_id, req.body.shopping_list.is_custom, req.body.shopping_list.is_complete, req.body.shopping_list.is_active)
 
       if(!req.body.shopping_list_items){
         res.status(201).json({
           status: "Created!",
-          message: "Successfully created updated shopping list data!",
+          message: "Successfully updated shopping list data!",
         });  
       }
+      await ShoppingListItemUsecase.updateBulk(req.body.shopping_list_items);
 
-      const shoppingListItems = req.body.shopping_list_items.map((item_info: { shopping_list_id: number; house_product_id: number; quantity: number; }) => {
-        const new_item = new ShoppingListItem();
-        new_item.shopping_list_id = id;
-        new_item.house_product_id = item_info.house_product_id;
-        new_item.quantity = item_info.quantity;
-        return new_item;
-      });
-
-      await new ShoppingListItemsRepo().updateMany(shoppingListItems);
-
-      res.status(200).json({
+      res.status(201).json({
         status: "Ok!",
         message: "Successfully updated shopping list and shopping list items data!",
       });
@@ -161,32 +110,6 @@ class ShoppingListController {
       });
     }
   }
-
-  async updateShoppingListItem(req: Request, res: Response) {
-    try {
-      const id = parseInt(req.params["id"]);
-      const new_shopping_list_item = new ShoppingListItem();
-
-      new_shopping_list_item.id = id;
-      new_shopping_list_item.shopping_list_id = req.body.shopping_list.shopping_list_id
-      new_shopping_list_item.house_product_id = req.body.shopping_list.house_product_id
-      new_shopping_list_item.quantity = req.body.shopping_list.quantity
-
-      await new ShoppingListItem().update(new_shopping_list_item);
-
-      res.status(200).json({
-        status: "Ok!",
-        message: "Successfully updated shopping list item data!",
-      });
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({
-        status: "Internal Server Error!",
-        message: "Internal Server Error!",
-      });
-    }
-  }
-
 }
 
 export default new ShoppingListController()

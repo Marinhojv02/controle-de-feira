@@ -3,8 +3,11 @@ import { HouseProduct } from "../model/HouseProduct.Model";
 
 interface IHouseProducts {
     save(houseProduct: HouseProduct): Promise<void>;
+    saveBulk(houseProducts: HouseProduct[]): Promise<void>;
     update(houseProduct: HouseProduct): Promise<void>;
+    updateBulk(houseProduct: HouseProduct[]): Promise<void>;
     delete(houseProductId: number): Promise<void>;
+    deleteBulk(houseProductId: number[]): Promise<void>;
     retrieveById(houseProductId: number): Promise<HouseProduct>;
     retrieveByHouseId(houseProduct: HouseProduct): Promise<HouseProduct[]>;
     retrieveAll(): Promise<HouseProduct[]>;
@@ -12,6 +15,13 @@ interface IHouseProducts {
 }
 
 export class HouseProductsRepo implements IHouseProducts {
+    updateBulk(houseProduct: HouseProduct[]): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    
+    deleteBulk(houseProductId: number[]): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
     
     async save(houseProduct: HouseProduct): Promise<void> {
       try {
@@ -27,6 +37,22 @@ export class HouseProductsRepo implements IHouseProducts {
       }
     }
 
+    async saveBulk(houseProducts: HouseProduct[]): Promise<void> {
+        try {
+            const houseProductsData = houseProducts.map((item) => ({
+                houseProduct_id: item.product_id,
+                house_id: item.house_id,
+                quantity_in_stock: item.quantity_in_stock,
+                reorder_point: item.reorder_point,
+                recomended_quantity: item.recommended_quantity,
+            }))
+
+            await HouseProduct.bulkCreate(houseProductsData);
+        } catch (error) {
+            throw new Error("Failed to create userHouses!");
+        }
+    }
+    
     async update(houseProduct: HouseProduct): Promise<void> {
       try {
         const new_houseProduct = await HouseProduct.findOne({
