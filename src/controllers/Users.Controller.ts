@@ -9,7 +9,6 @@ class UserController {
         req.body.username,
         req.body.password,
         req.body.email,
-        req.body.type
       );
 
       res.status(201).json({

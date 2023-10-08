@@ -5,7 +5,7 @@ import config from "../utils/config";
 import jwt from "jsonwebtoken";
 
 export class UserUsecases{
-    async createUser(name:string, username:string, password:string, email:string, type:string){
+    async createUser(name:string, username:string, password:string, email:string, type:string="RESIDENT"){
         const new_user = new User();
         new_user.name = name;
         (new_user.username = username),

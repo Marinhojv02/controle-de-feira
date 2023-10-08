@@ -11,7 +11,7 @@ class ProductRoutes extends BaseRoutes {
       validate(updateProductSchema),
       ProductController.update
     );
-    this.router.delete("/:id", ProductController.delete);
+    // this.router.delete("/:id", ProductController.delete);
     this.router.get("", ProductController.findAll);
     this.router.get("/:id(\\d+)", ProductController.findById);
   }
