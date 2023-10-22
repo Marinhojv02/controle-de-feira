@@ -6,7 +6,6 @@ export const createUserSchema  = z.object({
         username:z.string().min(4, {message: "username must be greater than 4 characters"}),
         password:z.string().min(6, {message: "password must be greater than 6 characters"}),
         email:z.string().email(),
-        type:z.string(),
     })
 })
 

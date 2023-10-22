@@ -1,5 +1,7 @@
 import { Op, Sequelize } from "sequelize";
 import { House } from "../model/House.Model";
+import { HouseProduct } from "../model/HouseProduct.Model";
+import { Product } from "../model/Product.Model";
 
 interface IHouses {
     save(house: House): Promise<House>;
@@ -66,15 +68,38 @@ export class HousesRepo implements IHouses {
           where: {
               house_id: houseId,
           },
+          include: [{
+            model: HouseProduct,
+            include: [{
+                model: Product
+            }]
+        }]
         });
         if (!new_house) {
           throw new Error("Houses not found!");
         }
         return new_house;
       } catch (error) {
+        console.log(error)
         throw new Error("Failed to retrieve houses!");
       }
     }
+
+    async retrieveByUserId(houseId: number): Promise<House> {
+        try {
+          const new_house = await House.findOne({
+            where: {
+                house_id: houseId,
+            },
+          });
+          if (!new_house) {
+            throw new Error("Houses not found!");
+          }
+          return new_house;
+        } catch (error) {
+          throw new Error("Failed to retrieve houses!");
+        }
+      }
 
     async retrieveAll(): Promise<House[]> {
       try {

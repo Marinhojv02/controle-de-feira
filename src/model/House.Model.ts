@@ -1,4 +1,5 @@
-import { Model, Table, Column, DataType } from 'sequelize-typescript';
+import { Model, Table, Column, DataType, HasMany } from 'sequelize-typescript';
+import { HouseProduct } from './HouseProduct.Model';
 
 @Table({
   tableName: 'House',
@@ -21,4 +22,7 @@ export class House extends Model {
     field: House.HOUSE_NAME,
   })
   house_name!: string;
+
+  @HasMany(() => HouseProduct, 'house_id')
+  houseProduct!: House;
 }

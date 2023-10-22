@@ -6,14 +6,8 @@ const userHouseSchema = z.object({
 
 export const createHouseSchema  = z.object({
     body:z.object({
-        house:z.object({
-            house_name:z.string().min(4, {message: "Name must be greater than 4"}) ,
-        }),
-        people:z.union([
-            z.array(userHouseSchema),
-            z.null(),
-            z.undefined(),
-        ])
+        house_name:z.string().min(4, {message: "Name must be greater than 4"}) ,
+        house_residents:z.array(userHouseSchema)
     })
 })
 
@@ -22,13 +16,7 @@ export const updateHouseSchema = z.object({
         id:z.string()
     }),
     body:z.object({
-        house:z.object({
-            house_name:z.string().min(4, {message: "Name must be greater than 4"}) ,
-        }),
-        people:z.union([
-            z.array(userHouseSchema),
-            z.null(),
-            z.undefined(),
-        ])
+        house_name:z.string().min(4, {message: "Name must be greater than 4"}) ,
+        house_residents:z.array(userHouseSchema)
     })
 })

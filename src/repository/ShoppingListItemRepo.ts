@@ -156,7 +156,7 @@ export class ShoppingListItemsRepo implements IShoppingListItems {
           },
         });
         if (!shopping_list_items) {
-          throw new Error("ShoppingListItems not found!");
+            return []
         }
         return shopping_list_items;
       } catch (error) {

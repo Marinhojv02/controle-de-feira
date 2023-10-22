@@ -22,82 +22,84 @@ export class UsersRepo implements IUsers {
                 last_login_date: user.last_login_date,
             });
         } catch (error) {
-             throw new Error("Failed to create user!");
+            console.log(error)
+            throw new Error("Failed to create user!");
         }
     }
     async update(user: User): Promise<void> {
         try {
-          const new_user = await User.findOne({
-            where: {
-                user_id: user.id,
-            },
-          });
-          if (!new_user) {
-            throw new Error("User not found!");
-          }
-          new_user.name = user.name;
-          new_user.username = user.password,
-          new_user.email = user.email,
-          new_user.type = user.type,
-
-          await new_user.save();
-        } catch (error) {
-            console.log(error)
-          throw new Error("Failed to update user!");
-        }
-      }
-      async delete(userId: number): Promise<void> {
-        try {
-          const new_user = await User.findOne({
-            where: {
-                user_id: userId,
-            },
-          });
-          if (!new_user) {
-            throw new Error("User not found!");
-          }
-    
-          await new_user.destroy();
-        } catch (error) {
-          throw new Error("Failed to delete user!");
-        }
-      }
-      async retrieveById(userId: number): Promise<User> {
-        try {
-          const new_user = await User.findOne({
-            where: {
-                user_id: userId,
-            },
-          });
-          if (!new_user) {
-            throw new Error("Users not found!");
-          }
-          return new_user;
-        } catch (error) {
-          throw new Error("Failed to retrieve users!");
-        }
-      }
-      
-      async retrieveByUsername(username: string): Promise<User> {
-        try {
             const new_user = await User.findOne({
-              where: {
-                  username: username,
-              },
+                where: {
+                    user_id: user.id,
+                },
             });
             if (!new_user) {
-              throw new Error("Users not found!");
+                throw new Error("User not found!");
+            }
+            new_user.name = user.name;
+            new_user.username = user.password,
+                new_user.email = user.email,
+                new_user.type = user.type,
+
+                await new_user.save();
+        } catch (error) {
+            console.log(error)
+            throw new Error("Failed to update user!");
+        }
+    }
+    async delete(userId: number): Promise<void> {
+        try {
+            const new_user = await User.findOne({
+                where: {
+                    user_id: userId,
+                },
+            });
+            if (!new_user) {
+                throw new Error("User not found!");
+            }
+
+            await new_user.destroy();
+        } catch (error) {
+            throw new Error("Failed to delete user!");
+        }
+    }
+    async retrieveById(userId: number): Promise<User> {
+        try {
+            const new_user = await User.findOne({
+                where: {
+                    user_id: userId,
+                },
+            });
+            if (!new_user) {
+                throw new Error("Users not found!");
             }
             return new_user;
-          } catch (error) {
-            throw new Error("Failed to retrieve users!");
-          }      }
-
-      async retrieveAll(): Promise<User[]> {
-        try {
-         return await User.findAll();
         } catch (error) {
-          throw new Error("Failed to retrieve user!");
+            throw new Error("Failed to retrieve users!");
         }
-      }
+    }
+
+    async retrieveByUsername(username: string): Promise<User> {
+        try {
+            const new_user = await User.findOne({
+                where: {
+                    username: username,
+                },
+            });
+            if (!new_user) {
+                throw new Error("Users not found!");
+            }
+            return new_user;
+        } catch (error) {
+            throw new Error("Failed to retrieve users!");
+        }
+    }
+
+    async retrieveAll(): Promise<User[]> {
+        try {
+            return await User.findAll();
+        } catch (error) {
+            throw new Error("Failed to retrieve user!");
+        }
+    }
 }

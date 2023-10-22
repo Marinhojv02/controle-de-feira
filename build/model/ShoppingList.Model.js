@@ -11,16 +11,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ShoppingList = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
-const Users_Model_1 = require("./Users.Model");
+const House_Model_1 = require("./House.Model");
 const ShoppingListItem_Model_1 = require("./ShoppingListItem.Model");
 let ShoppingList = class ShoppingList extends sequelize_typescript_1.Model {
 };
 exports.ShoppingList = ShoppingList;
 ShoppingList.SHOPPING_LIST_ID = 'shopping_list_id';
-ShoppingList.USER_ID = 'user_id';
+ShoppingList.HOUSE_ID = 'house_id';
 ShoppingList.CREATION_DATE = 'creation_date';
 ShoppingList.IS_CUSTOM = 'is_custom';
 ShoppingList.IS_COMPLETE = 'is_complete';
+ShoppingList.IS_ACTIVE = 'is_active';
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.INTEGER,
@@ -31,13 +32,13 @@ __decorate([
     __metadata("design:type", Number)
 ], ShoppingList.prototype, "shopping_list_id", void 0);
 __decorate([
-    (0, sequelize_typescript_1.ForeignKey)(() => Users_Model_1.User),
+    (0, sequelize_typescript_1.ForeignKey)(() => House_Model_1.House),
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.INTEGER,
-        field: ShoppingList.USER_ID,
+        field: ShoppingList.HOUSE_ID,
     }),
     __metadata("design:type", Number)
-], ShoppingList.prototype, "user_id", void 0);
+], ShoppingList.prototype, "house_id", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.DATE,
@@ -63,9 +64,18 @@ __decorate([
     __metadata("design:type", Boolean)
 ], ShoppingList.prototype, "is_complete", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => Users_Model_1.User),
-    __metadata("design:type", Users_Model_1.User)
-], ShoppingList.prototype, "user", void 0);
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.BOOLEAN,
+        allowNull: false,
+        field: ShoppingList.IS_ACTIVE,
+        defaultValue: true
+    }),
+    __metadata("design:type", Boolean)
+], ShoppingList.prototype, "is_active", void 0);
+__decorate([
+    (0, sequelize_typescript_1.BelongsTo)(() => House_Model_1.House),
+    __metadata("design:type", House_Model_1.House)
+], ShoppingList.prototype, "house", void 0);
 __decorate([
     (0, sequelize_typescript_1.HasMany)(() => ShoppingListItem_Model_1.ShoppingListItem),
     __metadata("design:type", Array)

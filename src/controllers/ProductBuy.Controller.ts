@@ -7,7 +7,6 @@ class ProductController {
     try {
       const new_product = new Product();
       new_product.product_name = req.body.product_name
-      new_product.description = req.body.description
       new_product.category = req.body.category
 
       await new ProductsRepo().save(new_product);
@@ -87,7 +86,6 @@ class ProductController {
 
       new_product.id = id;
       new_product.product_name = req.body.product_name
-      new_product.description = req.body.description
       new_product.category = req.body.category
 
       await new ProductsRepo().update(new_product);

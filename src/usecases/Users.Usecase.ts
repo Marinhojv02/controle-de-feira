@@ -5,6 +5,7 @@ import config from "../utils/config";
 import jwt from "jsonwebtoken";
 
 export class UserUsecases{
+    
     async createUser(name:string, username:string, password:string, email:string, type:string="RESIDENT"){
         const new_user = new User();
         new_user.name = name;
@@ -15,6 +16,7 @@ export class UserUsecases{
         (new_user.created_date = new Date()),
         await new UsersRepo().save(new_user);
     }
+
     async login(username: string, password: string){
         const user = await new UsersRepo().retrieveByUsername(username);
 
@@ -33,11 +35,9 @@ export class UserUsecases{
           config.jwt_secret_key,
           { expiresIn: "1h" }
         );
-        return token;
+        return {user, token};
     }
-    async delete(){
 
-    }
     async findById(id: number){
         return await new UsersRepo().retrieveById(id);
     }

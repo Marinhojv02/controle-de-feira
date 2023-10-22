@@ -4,11 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const database_1 = __importDefault(require("./utils/config/database"));
+const database_1 = __importDefault(require("./utils/database"));
 //routers
 const User_Routes_1 = __importDefault(require("./routes/User.Routes"));
+const House_Routes_1 = __importDefault(require("./routes/House.Routes"));
 const Products_Routes_1 = __importDefault(require("./routes/Products.Routes"));
 const ShoppingList_Routes_1 = __importDefault(require("./routes/ShoppingList.Routes"));
+const cors_1 = __importDefault(require("cors"));
 class App {
     constructor() {
         this.app = (0, express_1.default)();
@@ -19,6 +21,7 @@ class App {
     plugins() {
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: true }));
+        this.app.use((0, cors_1.default)({ origin: "http://localhost:3000" }));
     }
     routes() {
         this.app.route('/').get((req, res) => {
@@ -27,6 +30,7 @@ class App {
         this.app.use("/user", User_Routes_1.default);
         this.app.use("/product", Products_Routes_1.default);
         this.app.use("/shopping_list", ShoppingList_Routes_1.default);
+        this.app.use("/houses", House_Routes_1.default);
     }
     databaseSync() {
         var _a;

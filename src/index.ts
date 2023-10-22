@@ -2,8 +2,11 @@ import express, { Application, Request, Response } from "express";
 import Database from "./utils/database";
 //routers
 import UserRoutes from "./routes/User.Routes";
+import HouseRoutes from "./routes/House.Routes";
 import ProductRoutes from "./routes/Products.Routes";
 import ShoppingListRoutes from "./routes/ShoppingList.Routes";
+import cors from "cors";
+
 
 class App{
     public app:Application;
@@ -18,6 +21,7 @@ class App{
     protected plugins(): void {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(cors({origin: "http://localhost:3000"}));
     }
 
     protected routes():void{
@@ -28,6 +32,7 @@ class App{
         this.app.use("/user", UserRoutes);
         this.app.use("/product", ProductRoutes);
         this.app.use("/shopping_list", ShoppingListRoutes);
+        this.app.use("/houses", HouseRoutes);
     }  
 
     protected databaseSync(): void {

@@ -16,7 +16,6 @@ let Product = class Product extends sequelize_typescript_1.Model {
 exports.Product = Product;
 Product.PRODUCT_ID = 'product_id';
 Product.PRODUCT_NAME = 'product_name';
-Product.DESCRIPTION = 'description';
 Product.CATEGORY = 'category';
 __decorate([
     (0, sequelize_typescript_1.Column)({
@@ -35,13 +34,6 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], Product.prototype, "product_name", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.TEXT,
-        field: Product.DESCRIPTION,
-    }),
-    __metadata("design:type", String)
-], Product.prototype, "description", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.STRING(100),

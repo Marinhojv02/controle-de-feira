@@ -1,4 +1,4 @@
-import { Model, Table, Column, DataType, ForeignKey } from 'sequelize-typescript';
+import { Model, Table, Column, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { User } from './Users.Model';
 import { House } from './House.Model';
 
@@ -33,4 +33,10 @@ export class UserHouse extends Model {
     field: UserHouse.HOUSE_ID,
   })
   house_id!: number;
+
+  @BelongsTo(() => House) // Define the association with House
+  house!: House;
+
+  @BelongsTo(() => User) // Define the association with User
+  user!: User;
 }

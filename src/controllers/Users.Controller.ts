@@ -26,10 +26,10 @@ class UserController {
 
   async login(req: Request, res: Response) {
     try {
-      const token = await new UserUsecases().login(
+      const user_info = await new UserUsecases().login(
         req.body.username, req.body.password
         );
-      res.status(200).json({ token });
+      res.status(200).json({ user_info });
     } catch (error) {
       console.error(error);
       res

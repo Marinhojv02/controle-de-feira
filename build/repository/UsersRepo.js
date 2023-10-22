@@ -26,6 +26,7 @@ class UsersRepo {
                 });
             }
             catch (error) {
+                console.log(error);
                 throw new Error("Failed to create user!");
             }
         });
@@ -77,6 +78,24 @@ class UsersRepo {
                 const new_user = yield Users_Model_1.User.findOne({
                     where: {
                         user_id: userId,
+                    },
+                });
+                if (!new_user) {
+                    throw new Error("Users not found!");
+                }
+                return new_user;
+            }
+            catch (error) {
+                throw new Error("Failed to retrieve users!");
+            }
+        });
+    }
+    retrieveByUsername(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const new_user = yield Users_Model_1.User.findOne({
+                    where: {
+                        username: username,
                     },
                 });
                 if (!new_user) {

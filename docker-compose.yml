@@ -1,11 +1,13 @@
-version: '3'
+version: '3.5'
 services:
   postgres:
+    container_name: postgres-article
     image: postgres:latest
-    container_name: controle_de_feira
     environment:
-      POSTGRES_DB: postgres_teste
+      POSTGRES_DB: controle_de_feira
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
+    volumes:
+      - ./data:/data/postgres
     ports:
       - "5432:5432"

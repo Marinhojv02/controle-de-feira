@@ -6,15 +6,7 @@ import HouseProductUsecase from "../usecases/HouseProduct.Usecase";
 class HouseProductController {
   async create(req: Request, res: Response) {
     try {
-      const new_houseProduct = new HouseProduct();
-      
-      new_houseProduct.product_id = req.body.product_id;
-      new_houseProduct.house_id = req.body.house_id;
-      new_houseProduct.quantity_in_stock = req.body.quantity_in_stock;   
-      new_houseProduct.reorder_point = req.body.reorder_point;
-      new_houseProduct.recommended_quantity = req.body.recommended_quantity;    
-
-      await new HouseProductsRepo().save(new_houseProduct);
+      await HouseProductUsecase.create(req.body.product_id, req.body.house_id, req.body.quantity_in_stock, req.body.reorder_point, req.body.recommended_quantity) 
 
       res.status(201).json({
         status: "Created!",
@@ -29,28 +21,10 @@ class HouseProductController {
     }
   }
 
-  async delete(req: Request, res: Response) {
-    try {
-      const id = parseInt(req.params["id"]);
-      await new HouseProductsRepo().delete(id);
-
-      res.status(200).json({
-        status: "Ok!",
-        message: "Successfully deleted houseProduct!",
-      });
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({
-        status: "Internal Server Error!",
-        message: "Internal Server Error!",
-      });
-    }
-  }
-
   async findById(req: Request, res: Response) {
     try {
       const id = parseInt(req.params["id"]);
-      const new_houseProduct = await new HouseProductsRepo().retrieveById(id);
+      const new_houseProduct = await HouseProductUsecase.findById(id) 
 
       res.status(200).json({
         status: "Ok!",

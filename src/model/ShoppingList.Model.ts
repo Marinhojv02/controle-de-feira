@@ -1,5 +1,5 @@
 import { Model, Table, Column, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
-import { User } from './Users.Model';
+import { House } from './House.Model';
 import { ShoppingListItem } from './ShoppingListItem.Model';
 
 @Table({
@@ -7,7 +7,7 @@ import { ShoppingListItem } from './ShoppingListItem.Model';
 })
 export class ShoppingList extends Model {
   public static SHOPPING_LIST_ID = 'shopping_list_id' as string;
-  public static USER_ID = 'user_id' as string;
+  public static HOUSE_ID = 'house_id' as string;
   public static CREATION_DATE = 'creation_date' as string;
   public static IS_CUSTOM = 'is_custom' as string;
   public static IS_COMPLETE = 'is_complete' as string;
@@ -21,12 +21,12 @@ export class ShoppingList extends Model {
   })
   shopping_list_id!: number;
 
-  @ForeignKey(() => User)
+  @ForeignKey(() => House)
   @Column({
     type: DataType.INTEGER,
-    field: ShoppingList.USER_ID,
+    field: ShoppingList.HOUSE_ID,
   })
-  user_id!: number;
+  house_id!: number;
 
   @Column({
     type: DataType.DATE,
@@ -57,8 +57,8 @@ export class ShoppingList extends Model {
   })
   is_active!: boolean;
 
-  @BelongsTo(() => User)
-  user!: User;
+  @BelongsTo(() => House)
+  house!: House;
 
   @HasMany(() => ShoppingListItem)
   items!: ShoppingListItem[];

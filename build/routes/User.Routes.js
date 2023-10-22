@@ -5,15 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseRouter_1 = __importDefault(require("./base/BaseRouter"));
 const User_Schema_1 = require("../schema/User.Schema");
-const User_Controller_1 = __importDefault(require("../controllers/User.Controller"));
+const Users_Controller_1 = __importDefault(require("../controllers/Users.Controller"));
 const validate_1 = __importDefault(require("../helper/validate"));
 class NoteRoutes extends BaseRouter_1.default {
     routes() {
-        this.router.post("", (0, validate_1.default)(User_Schema_1.createUserSchema), User_Controller_1.default.create);
-        this.router.patch("/:id", (0, validate_1.default)(User_Schema_1.updateUserSchema), User_Controller_1.default.update);
-        this.router.delete("/:id", User_Controller_1.default.delete);
-        this.router.get("", User_Controller_1.default.findAll);
-        this.router.get("/:id", User_Controller_1.default.findById);
+        this.router.post("/register", (0, validate_1.default)(User_Schema_1.createUserSchema), Users_Controller_1.default.create);
+        this.router.post("/login", (0, validate_1.default)(User_Schema_1.loginUserSchema), Users_Controller_1.default.login);
+        this.router.patch("/:id", (0, validate_1.default)(User_Schema_1.updateUserSchema), Users_Controller_1.default.update);
+        this.router.get("", Users_Controller_1.default.findAll);
+        this.router.get("/:id", Users_Controller_1.default.findById);
     }
 }
 exports.default = new NoteRoutes().router;

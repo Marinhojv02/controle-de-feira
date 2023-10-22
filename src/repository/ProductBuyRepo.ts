@@ -5,8 +5,8 @@ interface IProductBuysBuy {
     save(product: ProductBuy): Promise<void>;
     saveMany(product: ProductBuy[]): Promise<ProductBuy[]>;
     update(product: ProductBuy): Promise<void>;
-    delete(productId: number): Promise<void>;
-    bulkDelete(productId: number[]): Promise<void>;
+    // delete(productId: number): Promise<void>;
+    // bulkDelete(productId: number[]): Promise<void>;
     retrieveById(productId: number): Promise<ProductBuy>;
     retrieveAll(): Promise<ProductBuy[]>;
 }
@@ -64,34 +64,34 @@ export class ProductBuyBuyRepo implements IProductBuysBuy {
       }
     }
     
-    async delete(productId: number): Promise<void> {
-      try {
-        const new_product = await ProductBuy.findOne({
-          where: {
-              product_id: productId,
-          },
-        });
-        if (!new_product) {
-          throw new Error("ProductBuy not found!");
-        }
+    // async delete(productId: number): Promise<void> {
+    //   try {
+    //     const new_product = await ProductBuy.findOne({
+    //       where: {
+    //           product_id: productId,
+    //       },
+    //     });
+    //     if (!new_product) {
+    //       throw new Error("ProductBuy not found!");
+    //     }
   
-        await new_product.destroy();
-      } catch (error) {
-        throw new Error("Failed to delete product!");
-      }
-    }
+    //     await new_product.destroy();
+    //   } catch (error) {
+    //     throw new Error("Failed to delete product!");
+    //   }
+    // }
 
-    async bulkDelete(productId: number[]): Promise<void>{
-        try{
-            const products = await ProductBuy.findAll({
-                where:{
+    // async bulkDelete(productId: number[]): Promise<void>{
+    //     try{
+    //         const products = await ProductBuy.findAll({
+    //             where:{
                     
-                }
-            });
-        }catch(error){
-            throw new Error("Failed to delete procuts!")
-        }
-    }
+    //             }
+    //         });
+    //     }catch(error){
+    //         throw new Error("Failed to delete procuts!")
+    //     }
+    // }
 
     
     async retrieveById(productId: number): Promise<ProductBuy> {
