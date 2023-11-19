@@ -42,6 +42,11 @@ class ShoppingListUsecase{
     async findById(id:number){
       return await new ShoppingListsRepo().retrieveById(id);
     }
+
+    async findByHouseId(house_id:number){
+        return await new ShoppingListsRepo().retrieveByHouse(house_id);
+    }
+
     async findAll(){
       return await new ShoppingListsRepo().retrieveAll();
     }

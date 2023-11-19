@@ -29,7 +29,7 @@ class App {
         });
         this.app.use("/user", User_Routes_1.default);
         this.app.use("/product", Products_Routes_1.default);
-        this.app.use("/shopping_list", ShoppingList_Routes_1.default);
+        this.app.use("/shopping-list", ShoppingList_Routes_1.default);
         this.app.use("/houses", House_Routes_1.default);
     }
     databaseSync() {

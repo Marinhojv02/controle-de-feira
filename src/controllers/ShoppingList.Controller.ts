@@ -68,6 +68,26 @@ class ShoppingListController {
         }
     }
 
+    async findByHouseId(req: Request, res: Response) {
+        try {
+            const id = parseInt(req.params["id"]);
+            const shopping_list = await ShoppingListUsecase.findByHouseId(id);
+
+            res.status(200).json({
+                status: "Ok!",
+                message: "Successfully fetched shopping list by id!",
+                shopping_list: shopping_list,
+            });
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({
+                status: "Internal Server Error!",
+                message: "Internal Server Error!",
+            });
+        }
+    }
+
+
     async findAll(req: Request, res: Response) {
         try {
             const shopping_lists = await ShoppingListUsecase.findAll();

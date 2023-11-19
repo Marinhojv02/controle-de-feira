@@ -1,5 +1,7 @@
 import { Sequelize, Op } from "sequelize";
 import { ShoppingListItem } from "../model/ShoppingListItem.Model";
+import { Product } from "../model/Product.Model";
+import { HouseProduct } from "../model/HouseProduct.Model";
 
 interface IShoppingListItems {
     save(shopping_list_item: ShoppingListItem): Promise<void>;
@@ -154,12 +156,19 @@ export class ShoppingListItemsRepo implements IShoppingListItems {
           where: {
               shopping_list_id: shopping_listId,
           },
+          include: [{
+            model: HouseProduct,
+            include: [{
+                model: Product
+            }]
+            }]
         });
         if (!shopping_list_items) {
             return []
         }
         return shopping_list_items;
       } catch (error) {
+        console.log(error)
         throw new Error("Failed to retrieve shopping_list_items!");
       }
     };

@@ -31,7 +31,7 @@ class App{
 
         this.app.use("/user", UserRoutes);
         this.app.use("/product", ProductRoutes);
-        this.app.use("/shopping_list", ShoppingListRoutes);
+        this.app.use("/shopping-list", ShoppingListRoutes);
         this.app.use("/houses", HouseRoutes);
     }  
 
